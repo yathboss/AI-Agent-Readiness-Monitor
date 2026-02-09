@@ -1,0 +1,12 @@
+/*
+Latency overview by URL.
+
+- Uses step logs in agent_steps-*.
+- Shows avg and p95 latency_ms per URL.
+- Tip: increase LIMIT or add filters, e.g.
+  | WHERE task == "pricing" AND site == "http://localhost:3000"
+*/
+FROM agent_steps-*
+| STATS avg_latency_ms = AVG(latency_ms), p95_latency_ms = PERCENTILE(latency_ms, 95) BY url
+| SORT p95_latency_ms DESC
+| LIMIT 20

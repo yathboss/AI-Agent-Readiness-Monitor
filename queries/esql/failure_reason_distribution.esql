@@ -1,0 +1,11 @@
+/*
+Failure reason distribution.
+
+- Uses run summaries in agent_runs-*.
+- Only failed runs (success == false).
+- Tip: add filters like task/site/domain/time.
+*/
+FROM agent_runs-*
+| WHERE success == false
+| STATS failures = COUNT(*) BY final_fail_reason
+| SORT failures DESC

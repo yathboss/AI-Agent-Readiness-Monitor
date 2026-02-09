@@ -1,0 +1,23 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Run AWOA Runner (suite)",
+      "type": "python",
+      "request": "launch",
+      "module": "apps.runner.main",
+      "args": ["--site", "http://localhost:3000"],
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+    {
+      "name": "Run AWOA Runner (pricing)",
+      "type": "python",
+      "request": "launch",
+      "module": "apps.runner.main",
+      "args": ["--site", "http://localhost:3000", "--task", "pricing"],
+      "console": "integratedTerminal",
+      "justMyCode": true
+    }
+  ]
+}

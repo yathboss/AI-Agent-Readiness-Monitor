@@ -1,0 +1,13 @@
+/*
+Top failing URLs (where the run ended).
+
+- Uses run summaries in agent_runs-*.
+- Interprets "top failing" as the most common final_url among failed runs.
+- Tip: add filters like:
+  | WHERE site == "http://localhost:3000" AND ts_start >= "2026-02-01T00:00:00Z"
+*/
+FROM agent_runs-*
+| WHERE success == false
+| STATS failures = COUNT(*), unique_runs = COUNT_DISTINCT(run_id) BY final_url
+| SORT failures DESC
+| LIMIT 20

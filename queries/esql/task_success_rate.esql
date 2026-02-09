@@ -1,0 +1,11 @@
+/*
+Task success rate per task.
+
+- Uses run summaries in agent_runs-*.
+- Tip: add your own filters, e.g.
+  | WHERE site == "http://localhost:3000" AND ts_start >= "2026-02-01T00:00:00Z"
+*/
+FROM agent_runs-*
+| EVAL success_flag = CASE(success == true, 1, 0)
+| STATS total_runs = COUNT(*), success_runs = SUM(success_flag), success_rate_pct = 100 * AVG(success_flag) BY task
+| SORT success_rate_pct DESC

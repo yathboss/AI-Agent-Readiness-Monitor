@@ -1,0 +1,8 @@
+playwright==1.47.0
+beautifulsoup4==4.12.3
+lxml==5.2.2
+elasticsearch==8.14.0
+python-dotenv==1.0.1
+pydantic==2.8.2
+fastapi==0.112.2
+uvicorn==0.30.6

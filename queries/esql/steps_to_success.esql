@@ -1,0 +1,11 @@
+/*
+Steps-to-success (how many BFS steps it took).
+
+- Uses run summaries in agent_runs-*.
+- Only successful runs.
+- Shows median and average steps per task.
+*/
+FROM agent_runs-*
+| WHERE success == true
+| STATS median_steps = MEDIAN(num_steps), avg_steps = AVG(num_steps) BY task
+| SORT median_steps DESC

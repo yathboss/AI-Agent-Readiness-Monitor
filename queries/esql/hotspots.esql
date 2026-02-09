@@ -1,0 +1,28 @@
+/*
+Hotspots: worst “agent-hostile” pages by failure rate + time + steps.
+
+- Uses step logs in agent_steps-*.
+- Aggregates by (task, url).
+- failure_rate_pct is the % of step visits that ended in status == "fail".
+- avg_step_num is the average BFS step_num when that URL was visited.
+
+Run this first to find hotspots:
+*/
+FROM agent_steps-*
+| EVAL fail_flag = CASE(status == "fail", 1, 0)
+| STATS visits = COUNT(*), failures = SUM(fail_flag), failure_rate_pct = 100 * AVG(fail_flag), avg_latency_ms = AVG(latency_ms), p95_latency_ms = PERCENTILE(latency_ms, 95), avg_step_num = AVG(step_num) BY task, url
+| WHERE visits >= 5
+| SORT failure_rate_pct DESC, p95_latency_ms DESC, visits DESC
+| LIMIT 50
+
+/*
+Example traces for a chosen hotspot URL.
+
+1) Replace <HOTSPOT_URL> below.
+2) Copy/paste this second query separately (don’t run both blocks together).
+*/
+FROM agent_steps-*
+| WHERE url == "<HOTSPOT_URL>" AND status == "fail"
+| KEEP ts, run_id, task, url, fail_reason, step_num, latency_ms
+| SORT ts DESC
+| LIMIT 3
