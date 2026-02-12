@@ -1,8 +1,42 @@
+# Python
 .venv/
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+ruff_cache/
+*.log
+
+# Env
 .env
+.env.*
+
+# Node / Next
 node_modules/
 .next/
+out/
 dist/
+coverage/
+
+# Streamlit
+.streamlit/
+
+# Playwright
+playwright-report/
+test-results/
+trace.zip
+
+# Elasticsearch local data (only if you mount volumes)
+esdata/
+kibanadata/
+
+# Reports (keep markdown, ignore heavy json if you want)
+reports/*.json
+
+# OS / IDE
 .DS_Store
+Thumbs.db
+.vscode/
+.idea/

@@ -1,0 +1,18 @@
+-- AWOA Phase 3
+-- median_latency_by_url.esql
+-- Purpose: Latency distribution per URL (p50 + avg)
+--
+-- Params:
+--   steps_index: index pattern (default: agent_steps-*)
+--   time_filter: boolean expression or TRUE
+--   domain_filter: boolean expression or TRUE
+--   task_filter: boolean expression or TRUE
+--   limit: integer
+
+FROM {{steps_index}}
+| WHERE {{time_filter}}
+| WHERE {{domain_filter}}
+| WHERE {{task_filter}}
+| STATS p50_latency = PERCENTILE(latency_ms, 50), avg_latency = AVG(latency_ms) BY url
+| SORT p50_latency DESC
+| LIMIT {{limit}}

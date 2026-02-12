@@ -1,0 +1,20 @@
+-- AWOA Phase 3
+-- fail_reason_trends_daily.esql
+-- Purpose: Daily fail reason counts by task
+--
+-- Params:
+--   steps_index: index pattern (default: agent_steps-*)
+--   time_filter: boolean expression, e.g. 'ts >= NOW() - 14 day' or 'TRUE'
+--   domain_filter: boolean expression, e.g. 'domain == "example.com"' or 'TRUE'
+--   task_filter: boolean expression, e.g. 'task == "pricing"' or 'TRUE'
+--   limit: integer
+
+FROM {{steps_index}}
+| WHERE {{time_filter}}
+| WHERE {{domain_filter}}
+| WHERE {{task_filter}}
+| WHERE status == "fail"
+| EVAL day = DATE_TRUNC(1 day, ts)
+| STATS fails = COUNT() BY day, task, fail_reason
+| SORT day ASC, fails DESC
+| LIMIT {{limit}}

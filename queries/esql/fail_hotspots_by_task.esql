@@ -1,0 +1,19 @@
+-- AWOA Phase 3
+-- fail_hotspots_by_task.esql
+-- Purpose: Top failing URLs per task + fail_reason (with avg latency)
+--
+-- Params:
+--   steps_index: index pattern (default: agent_steps-*)
+--   time_filter: boolean expression, e.g. 'ts >= NOW() - 7 day' or 'TRUE'
+--   domain_filter: boolean expression, e.g. 'domain == "example.com"' or 'TRUE'
+--   task_filter: boolean expression, e.g. 'task == "pricing"' or 'TRUE'
+--   limit: integer
+
+FROM {{steps_index}}
+| WHERE {{time_filter}}
+| WHERE {{domain_filter}}
+| WHERE {{task_filter}}
+| WHERE status == "fail"
+| STATS fails = COUNT(), avg_latency = AVG(latency_ms) BY task, url, fail_reason
+| SORT fails DESC
+| LIMIT {{limit}}
